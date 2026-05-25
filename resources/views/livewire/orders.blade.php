@@ -1,32 +1,32 @@
-<div style="background: #f4f6fb; min-height: 100vh; padding: 32px;">
+<div class="bg-[#f4f6fb] min-h-screen p-8">
 
-    <div style="margin-bottom: 24px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 4px;">Zákazky</h2>
-        <p style="color: #6b7280; margin: 0;">Eviduj prijaté objednávky — jeden zákazník môže objednať viac výrobkov</p>
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-1">Zákazky</h2>
+        <p class="text-gray-500 m-0">Eviduj prijaté objednávky — jeden zákazník môže objednať viac výrobkov</p>
     </div>
 
     {{-- Nová zákazka --}}
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; margin-bottom: 20px;">
-        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 16px; border-left: 3px solid #6d28d9; padding-left: 10px;">Nová zákazka</div>
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 mb-5">
+        <div class="font-semibold text-base mb-4 border-l-[3px] border-l-violet-700 pl-2.5">Nová zákazka</div>
 
-        <div style="margin-bottom: 16px;">
-            <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Zákazník</label>
+        <div class="mb-4">
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Zákazník</label>
             <input wire:model="zakaznik" type="text" placeholder="Meno zákazníka"
-                style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; outline: none; width: 340px; max-width: 100%;" />
-            @error('zakaznik') <div style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;">{{ $message }}</div> @enderror
+                class="border border-gray-200 rounded-lg px-3.5 py-2.5 text-[0.95rem] outline-none w-[340px] max-w-full" />
+            @error('zakaznik') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
         </div>
 
-        <div style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2.5">
             Výrobky v zákazke
         </div>
 
         @foreach($polozky as $i => $polozka)
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                <div style="width: 28px; height: 28px; background: #6d28d9; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; flex-shrink: 0;">
+            <div class="flex items-center gap-2.5 mb-2.5 flex-wrap">
+                <div class="w-7 h-7 bg-violet-700 text-white rounded-full flex items-center justify-center text-xs font-bold shrink-0">
                     {{ $i + 1 }}
                 </div>
                 <select wire:model.live="polozky.{{ $i }}.vyrobok_id"
-                    style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 9px 12px; font-size: 0.9rem; outline: none; flex: 1; min-width: 180px; max-width: 340px;">
+                    class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none flex-1 min-w-[180px] max-w-[340px]">
                     <option value="">— Vyber výrobok —</option>
                     @foreach($vyrobky as $v)
                         <option value="{{ $v->id }}">{{ $v->nazov }}</option>
@@ -34,79 +34,79 @@
                 </select>
                 <input wire:model.live="polozky.{{ $i }}.mnozstvo" type="number" placeholder="Množstvo"
                     min="0.5" step="0.5"
-                    style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 9px 12px; font-size: 0.9rem; outline: none; width: 110px;" />
+                    class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none w-[110px]" />
                 <button wire:click="znizitMnozstvo({{ $i }})"
-                    style="background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; width: 34px; height: 36px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #374151;">—</button>
+                    class="bg-gray-100 border border-gray-200 rounded-lg w-[34px] h-9 text-lg cursor-pointer flex items-center justify-center text-gray-700">—</button>
                 <button wire:click="odstranitPolozku({{ $i }})"
-                    style="background: #fee2e2; border: none; border-radius: 8px; width: 34px; height: 36px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #dc2626;">✕</button>
+                    class="bg-red-100 border-0 rounded-lg w-[34px] h-9 text-base cursor-pointer flex items-center justify-center text-red-600">✕</button>
             </div>
-            @error("polozky.{$i}.vyrobok_id") <div style="color: #ef4444; font-size: 0.75rem; margin-bottom: 6px; padding-left: 38px;">{{ $message }}</div> @enderror
+            @error("polozky.{$i}.vyrobok_id") <div class="text-red-500 text-xs mb-1.5 pl-9">{{ $message }}</div> @enderror
         @endforeach
 
         <button wire:click="pridatPolozku"
-            style="background: white; color: #6d28d9; border: 1.5px solid #6d28d9; border-radius: 8px; padding: 8px 18px; font-size: 0.9rem; font-weight: 600; cursor: pointer; margin-bottom: 20px;">
+            class="bg-white text-violet-700 border-[1.5px] border-violet-700 rounded-lg px-4 py-2 text-sm font-semibold cursor-pointer mb-5">
             + Pridať výrobok
         </button>
 
-        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 20px; padding-top: 16px; border-top: 1px solid #f3f4f6;">
-            <div style="text-align: right;">
-                <div style="font-size: 0.72rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Celková cena zákazky</div>
-                <div style="font-size: 1.5rem; font-weight: 700; color: #111827;">{{ number_format($celkovaCena, 2, '.', '') }} €</div>
+        <div class="flex justify-end items-center gap-5 pt-4 border-t border-gray-100">
+            <div class="text-right">
+                <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Celková cena zákazky</div>
+                <div class="text-2xl font-bold text-gray-900">{{ number_format($celkovaCena, 2, '.', '') }} €</div>
             </div>
             <button wire:click="ulozitZakazku"
-                style="background: #6d28d9; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-size: 0.95rem; font-weight: 600; cursor: pointer;">
+                class="bg-violet-700 text-white border-0 rounded-lg px-6 py-3 text-[0.95rem] font-semibold cursor-pointer">
                 ✓ Uložiť zákazku
             </button>
         </div>
     </div>
 
     {{-- Nevybavené zákazky --}}
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; margin-bottom: 20px;">
-        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 16px; border-left: 3px solid #6d28d9; padding-left: 10px;">Nevybavené zákazky</div>
-        <table style="width: 100%; border-collapse: collapse;">
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 mb-5">
+        <div class="font-semibold text-base mb-4 border-l-[3px] border-l-violet-700 pl-2.5">Nevybavené zákazky</div>
+        <table class="w-full border-collapse">
             <thead>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Dátum</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Zákazník</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Výrobky</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Celkom</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Stav</th>
-                    <th style="padding: 8px 12px;"></th>
+                <tr class="border-b border-gray-200">
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Dátum</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Zákazník</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Výrobky</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Celkom</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Stav</th>
+                    <th class="px-3 py-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($nevybaveneZakazky as $z)
-                    <tr style="border-bottom: 1px solid #f3f4f6;">
-                        <td style="padding: 12px 12px; white-space: nowrap;">{{ $z->created_at->format('j. n. Y') }}</td>
-                        <td style="padding: 12px 12px; font-weight: 500;">{{ $z->zakaznik }}</td>
-                        <td style="padding: 12px 12px;">
-                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <tr class="border-b border-gray-100">
+                        <td class="px-3 py-3 whitespace-nowrap">{{ $z->created_at->format('j. n. Y') }}</td>
+                        <td class="px-3 py-3 font-medium">{{ $z->zakaznik }}</td>
+                        <td class="px-3 py-3">
+                            <div class="flex flex-wrap gap-1.5">
                                 @foreach($z->polozky as $p)
-                                    <span style="background: #ede9fe; color: #5b21b6; border-radius: 6px; padding: 3px 9px; font-size: 0.8rem; font-weight: 500; white-space: nowrap;">
+                                    <span class="bg-violet-100 text-violet-800 rounded-md px-2 py-0.5 text-[0.8rem] font-medium whitespace-nowrap">
                                         {{ $p->vyrobok->nazov }} × {{ (float)$p->mnozstvo }} {{ $p->vyrobok->jednotka }}
                                     </span>
                                 @endforeach
                             </div>
                         </td>
-                        <td style="padding: 12px 12px; font-weight: 600;">{{ number_format($z->celkom, 2) }} €</td>
-                        <td style="padding: 12px 12px;">
-                            <span style="background: #fef3c7; color: #d97706; border-radius: 12px; padding: 3px 10px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">Nevybavené</span>
+                        <td class="px-3 py-3 font-semibold">{{ number_format($z->celkom, 2) }} €</td>
+                        <td class="px-3 py-3">
+                            <span class="bg-amber-100 text-amber-600 rounded-full px-2.5 py-0.5 text-[0.72rem] font-bold uppercase tracking-wide">Nevybavené</span>
                         </td>
-                        <td style="padding: 12px 12px;">
-                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                        <td class="px-3 py-3">
+                            <div class="flex gap-2 justify-end">
                                 <button wire:click="vybaviZakazku({{ $z->id }})"
-                                    style="background: #059669; color: white; border: none; border-radius: 8px; padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                                    class="bg-emerald-600 text-white border-0 rounded-lg px-3.5 py-1.5 text-sm font-semibold cursor-pointer whitespace-nowrap">
                                     ✓ Vybaviť
                                 </button>
                                 <button wire:click="vymazatZakazku({{ $z->id }})"
                                     wire:confirm="Naozaj chceš vymazať túto zákazku?"
-                                    style="background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; cursor: pointer;">✕</button>
+                                    class="bg-red-100 text-red-600 border-0 rounded-lg px-2.5 py-1.5 text-sm cursor-pointer">✕</button>
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 28px; color: #9ca3af; font-style: italic;">Žiadne nevybavené zákazky.</td>
+                        <td colspan="6" class="text-center py-7 text-gray-400 italic">Žiadne nevybavené zákazky.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -114,52 +114,52 @@
     </div>
 
     {{-- Vybavené zákazky --}}
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px;">
-        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 16px; border-left: 3px solid #6d28d9; padding-left: 10px;">Vybavené zákazky</div>
-        <table style="width: 100%; border-collapse: collapse;">
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6">
+        <div class="font-semibold text-base mb-4 border-l-[3px] border-l-violet-700 pl-2.5">Vybavené zákazky</div>
+        <table class="w-full border-collapse">
             <thead>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Dátum</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Zákazník</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Výrobky</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Celkom</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Stav</th>
-                    <th style="padding: 8px 12px;"></th>
+                <tr class="border-b border-gray-200">
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Dátum</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Zákazník</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Výrobky</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Celkom</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Stav</th>
+                    <th class="px-3 py-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($vybaveneZakazky as $z)
-                    <tr style="border-bottom: 1px solid #f3f4f6;">
-                        <td style="padding: 12px 12px; white-space: nowrap;">{{ $z->created_at->format('j. n. Y') }}</td>
-                        <td style="padding: 12px 12px; font-weight: 500;">{{ $z->zakaznik }}</td>
-                        <td style="padding: 12px 12px;">
-                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <tr class="border-b border-gray-100">
+                        <td class="px-3 py-3 whitespace-nowrap">{{ $z->created_at->format('j. n. Y') }}</td>
+                        <td class="px-3 py-3 font-medium">{{ $z->zakaznik }}</td>
+                        <td class="px-3 py-3">
+                            <div class="flex flex-wrap gap-1.5">
                                 @foreach($z->polozky as $p)
-                                    <span style="background: #ede9fe; color: #5b21b6; border-radius: 6px; padding: 3px 9px; font-size: 0.8rem; font-weight: 500; white-space: nowrap;">
+                                    <span class="bg-violet-100 text-violet-800 rounded-md px-2 py-0.5 text-[0.8rem] font-medium whitespace-nowrap">
                                         {{ $p->vyrobok->nazov }} × {{ (float)$p->mnozstvo }} {{ $p->vyrobok->jednotka }}
                                     </span>
                                 @endforeach
                             </div>
                         </td>
-                        <td style="padding: 12px 12px; font-weight: 600;">{{ number_format($z->celkom, 2) }} €</td>
-                        <td style="padding: 12px 12px;">
-                            <span style="background: #d1fae5; color: #059669; border-radius: 12px; padding: 3px 10px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">Vybavené</span>
+                        <td class="px-3 py-3 font-semibold">{{ number_format($z->celkom, 2) }} €</td>
+                        <td class="px-3 py-3">
+                            <span class="bg-emerald-100 text-emerald-600 rounded-full px-2.5 py-0.5 text-[0.72rem] font-bold uppercase tracking-wide">Vybavené</span>
                         </td>
-                        <td style="padding: 12px 12px;">
-                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                        <td class="px-3 py-3">
+                            <div class="flex gap-2 justify-end">
                                 <button wire:click="vratZakazku({{ $z->id }})"
-                                    style="background: white; color: #4f46e5; border: 1.5px solid #4f46e5; border-radius: 8px; padding: 6px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                                    class="bg-white text-indigo-600 border-[1.5px] border-indigo-600 rounded-lg px-3.5 py-1.5 text-sm font-semibold cursor-pointer whitespace-nowrap">
                                     ← Späť
                                 </button>
                                 <button wire:click="vymazatZakazku({{ $z->id }})"
                                     wire:confirm="Naozaj chceš vymazať túto zákazku?"
-                                    style="background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; cursor: pointer;">✕</button>
+                                    class="bg-red-100 text-red-600 border-0 rounded-lg px-2.5 py-1.5 text-sm cursor-pointer">✕</button>
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 28px; color: #9ca3af; font-style: italic;">Žiadne vybavené zákazky.</td>
+                        <td colspan="6" class="text-center py-7 text-gray-400 italic">Žiadne vybavené zákazky.</td>
                     </tr>
                 @endforelse
             </tbody>

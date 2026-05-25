@@ -1,71 +1,77 @@
-<div style="background: #f4f6fb; min-height: 100vh; padding: 32px;">
+<div class="bg-[#f4f6fb] min-h-screen p-8">
 
-    <div style="margin-bottom: 24px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 4px;">Správa výrobkov</h2>
-        <p style="color: #6b7280; margin: 0;">Pridaj výrobky, nastav cenu a výrobné náklady</p>
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-1">Správa výrobkov</h2>
+        <p class="text-gray-500 m-0">Pridaj výrobky, nastav cenu a výrobné náklady</p>
     </div>
 
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; margin-bottom: 20px;">
-        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 16px; border-left: 3px solid #6d28d9; padding-left: 10px;">Pridať nový výrobok</div>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
-            <div style="display: flex; flex-direction: column; flex: 2; min-width: 180px;">
-                <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px;">Názov výrobku</label>
-                <input wire:model="nazov" type="text" placeholder="napr. Chlieb, Stôl, Svíčka…" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; outline: none;" />
-                @error('nazov') <span style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;">{{ $message }}</span> @enderror
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 mb-5">
+        <div class="font-semibold text-base mb-4 border-l-[3px] border-l-violet-700 pl-2.5">Pridať nový výrobok</div>
+        <div class="flex gap-3 flex-wrap items-end">
+            <div class="flex flex-col flex-[2] min-w-[180px]">
+                <label class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Názov výrobku</label>
+                <input wire:model="nazov" type="text" placeholder="napr. Chlieb, Stôl, Svíčka…"
+                    class="border border-gray-200 rounded-lg px-3.5 py-2.5 text-[0.95rem] outline-none" />
+                @error('nazov') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
-            <div style="display: flex; flex-direction: column; min-width: 140px;">
-                <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px;">Jednotka</label>
-                <select wire:model="jednotka" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; outline: none;">
+            <div class="flex flex-col min-w-[140px]">
+                <label class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Jednotka</label>
+                <select wire:model="jednotka"
+                    class="border border-gray-200 rounded-lg px-3.5 py-2.5 text-[0.95rem] outline-none">
                     <option value="ks">ks (kus)</option>
                     <option value="kg">kg (kilogram)</option>
                     <option value="m">m (meter)</option>
                     <option value="l">l (liter)</option>
                 </select>
             </div>
-            <div style="display: flex; flex-direction: column; min-width: 160px;">
-                <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px;">Cena za jednotku (€)</label>
-                <input wire:model="cena" type="number" placeholder="0.00" min="0" step="0.01" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; outline: none;" />
-                @error('cena') <span style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;">{{ $message }}</span> @enderror
+            <div class="flex flex-col min-w-[160px]">
+                <label class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Cena za jednotku (€)</label>
+                <input wire:model="cena" type="number" placeholder="0.00" min="0" step="0.01"
+                    class="border border-gray-200 rounded-lg px-3.5 py-2.5 text-[0.95rem] outline-none" />
+                @error('cena') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
-            <div style="display: flex; flex-direction: column; min-width: 160px;">
-                <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 6px;">Výrobné náklady (€/j.)</label>
-                <input wire:model="naklady" type="number" placeholder="0.00" min="0" step="0.01" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; outline: none;" />
-                @error('naklady') <span style="color: #ef4444; font-size: 0.75rem; margin-top: 4px;">{{ $message }}</span> @enderror
+            <div class="flex flex-col min-w-[160px]">
+                <label class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Výrobné náklady (€/j.)</label>
+                <input wire:model="naklady" type="number" placeholder="0.00" min="0" step="0.01"
+                    class="border border-gray-200 rounded-lg px-3.5 py-2.5 text-[0.95rem] outline-none" />
+                @error('naklady') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
             </div>
-            <button wire:click="pridatVyrobok" style="background: #6d28d9; color: white; border: none; border-radius: 8px; padding: 10px 22px; font-size: 0.95rem; font-weight: 600; cursor: pointer;">
+            <button wire:click="pridatVyrobok"
+                class="bg-violet-700 text-white border-0 rounded-lg px-5 py-2.5 text-[0.95rem] font-semibold cursor-pointer">
                 + Pridať
             </button>
         </div>
     </div>
 
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px;">
-        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 16px; border-left: 3px solid #6d28d9; padding-left: 10px;">Zoznam výrobkov</div>
-        <table style="width: 100%; border-collapse: collapse;">
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6">
+        <div class="font-semibold text-base mb-4 border-l-[3px] border-l-violet-700 pl-2.5">Zoznam výrobkov</div>
+        <table class="w-full border-collapse">
             <thead>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Názov</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Jednotka</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Cena</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Náklady</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Zisk / j.</th>
-                    <th style="padding: 8px 12px;"></th>
+                <tr class="border-b border-gray-200">
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Názov</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Jednotka</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Cena</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Náklady</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Zisk / j.</th>
+                    <th class="px-3 py-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($vyrobky as $vyrobok)
-                    <tr style="border-bottom: 1px solid #f3f4f6;">
-                        <td style="padding: 12px 12px;">{{ $vyrobok->nazov }}</td>
-                        <td style="padding: 12px 12px;">{{ $vyrobok->jednotka }}</td>
-                        <td style="padding: 12px 12px;">{{ number_format($vyrobok->cena, 2) }} €</td>
-                        <td style="padding: 12px 12px;">{{ number_format($vyrobok->naklady, 2) }} €</td>
-                        <td style="padding: 12px 12px;">{{ number_format($vyrobok->cena - $vyrobok->naklady, 2) }} €</td>
-                        <td style="padding: 12px 12px;">
-                            <button wire:click="vymazatVyrobok({{ $vyrobok->id }})" style="color: #ef4444; background: none; border: none; cursor: pointer; font-size: 0.9rem;">Vymazať</button>
+                    <tr class="border-b border-gray-100">
+                        <td class="px-3 py-3">{{ $vyrobok->nazov }}</td>
+                        <td class="px-3 py-3">{{ $vyrobok->jednotka }}</td>
+                        <td class="px-3 py-3">{{ number_format($vyrobok->cena, 2) }} €</td>
+                        <td class="px-3 py-3">{{ number_format($vyrobok->naklady, 2) }} €</td>
+                        <td class="px-3 py-3">{{ number_format($vyrobok->cena - $vyrobok->naklady, 2) }} €</td>
+                        <td class="px-3 py-3">
+                            <button wire:click="vymazatVyrobok({{ $vyrobok->id }})"
+                                class="text-red-500 bg-transparent border-0 cursor-pointer text-sm">Vymazať</button>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 24px; color: #9ca3af; font-style: italic;">Zatiaľ žiadne výrobky.</td>
+                        <td colspan="6" class="text-center py-6 text-gray-400 italic">Zatiaľ žiadne výrobky.</td>
                     </tr>
                 @endforelse
             </tbody>

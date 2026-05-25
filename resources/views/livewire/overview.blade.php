@@ -1,92 +1,93 @@
-<div style="background: #f4f6fb; min-height: 100vh; padding: 32px;">
+<div class="bg-[#f4f6fb] min-h-screen p-8">
 
-    <div style="margin-bottom: 24px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 4px;">Prehľad</h2>
-        <p style="color: #6b7280; margin: 0;">Štatistiky predaja, tržieb a zisku za zvolené obdobie</p>
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold mb-1">Prehľad</h2>
+        <p class="text-gray-500 m-0">Štatistiky predaja, tržieb a zisku za zvolené obdobie</p>
     </div>
 
     {{-- Filter tlačidlá --}}
-    <div style="display: flex; gap: 4px; margin-bottom: 20px; background: white; border-radius: 10px; padding: 4px; width: fit-content; box-shadow: 0 1px 4px rgba(0,0,0,0.07);">
+    <div class="flex gap-1 mb-5 bg-white rounded-[10px] p-1 w-fit shadow-[0_1px_4px_rgba(0,0,0,0.07)]">
         @foreach(['tyden' => 'Týždeň', 'mesiac' => 'Mesiac', 'rok' => 'Rok', 'vsetko' => 'Všetko'] as $typ => $label)
             <button wire:click="$set('filterTyp', '{{ $typ }}')"
-                style="{{ $filterTyp === $typ ? 'background: #6d28d9; color: white;' : 'background: transparent; color: #374151;' }} border: none; border-radius: 7px; padding: 7px 18px; font-size: 0.9rem; font-weight: {{ $filterTyp === $typ ? '600' : '500' }}; cursor: pointer;">
+                class="border-0 rounded-[7px] px-4 py-1.5 text-sm cursor-pointer
+                    {{ $filterTyp === $typ ? 'bg-violet-700 text-white font-semibold' : 'bg-transparent text-gray-700 font-medium' }}">
                 {{ $label }}
             </button>
         @endforeach
     </div>
 
     {{-- Výber obdobia --}}
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 18px 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px;">
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] px-6 py-4 mb-5 flex items-center gap-3.5">
         @if($filterTyp === 'tyden')
-            <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Vyber týždeň:</label>
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber týždeň:</label>
             <input type="week" wire:model.live="selTyden"
-                style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; font-size: 0.9rem; outline: none;" />
+                class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
         @elseif($filterTyp === 'mesiac')
-            <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Vyber mesiac:</label>
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber mesiac:</label>
             <input type="month" wire:model.live="selMesiac"
-                style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; font-size: 0.9rem; outline: none;" />
+                class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
         @elseif($filterTyp === 'rok')
-            <label style="font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Vyber rok:</label>
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber rok:</label>
             <select wire:model.live="selRok"
-                style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; font-size: 0.9rem; outline: none;">
+                class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none">
                 @foreach($roky as $rok)
                     <option value="{{ $rok }}">{{ $rok }}</option>
                 @endforeach
             </select>
         @else
-            <span style="color: #6d28d9; font-size: 0.9rem; font-weight: 600;">Zobrazené všetky zákazky</span>
+            <span class="text-violet-700 text-sm font-semibold">Zobrazené všetky zákazky</span>
         @endif
     </div>
 
     {{-- Stat karty --}}
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
-        <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; border-top: 3px solid #6d28d9;">
-            <div style="font-size: 1.5rem; margin-bottom: 10px;">🧾</div>
-            <div style="font-size: 1.9rem; font-weight: 700; color: #111827; margin-bottom: 6px;">{{ $pocetZakaziek }}</div>
-            <div style="font-size: 0.72rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Vybavené zákazky</div>
+    <div class="grid grid-cols-4 gap-4 mb-5">
+        <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-violet-700">
+            <div class="text-2xl mb-2.5">🧾</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ $pocetZakaziek }}</div>
+            <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Vybavené zákazky</div>
         </div>
-        <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; border-top: 3px solid #0891b2;">
-            <div style="font-size: 1.5rem; margin-bottom: 10px;">💰</div>
-            <div style="font-size: 1.9rem; font-weight: 700; color: #111827; margin-bottom: 6px;">{{ number_format($trzbyTotal, 2) }} €</div>
-            <div style="font-size: 0.72rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Tržby celkom</div>
+        <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-cyan-600">
+            <div class="text-2xl mb-2.5">💰</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($trzbyTotal, 2) }} €</div>
+            <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Tržby celkom</div>
         </div>
-        <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; border-top: 3px solid #d97706;">
-            <div style="font-size: 1.5rem; margin-bottom: 10px;">🏭</div>
-            <div style="font-size: 1.9rem; font-weight: 700; color: #111827; margin-bottom: 6px;">{{ number_format($nakladyTotal, 2) }} €</div>
-            <div style="font-size: 0.72rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Náklady celkom</div>
+        <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-amber-600">
+            <div class="text-2xl mb-2.5">🏭</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($nakladyTotal, 2) }} €</div>
+            <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Náklady celkom</div>
         </div>
-        <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px; border-top: 3px solid #059669;">
-            <div style="font-size: 1.5rem; margin-bottom: 10px;">📈</div>
-            <div style="font-size: 1.9rem; font-weight: 700; color: #111827; margin-bottom: 6px;">{{ number_format($ziskTotal, 2) }} €</div>
-            <div style="font-size: 0.72rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Zisk (tržby − náklady)</div>
+        <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-emerald-600">
+            <div class="text-2xl mb-2.5">📈</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($ziskTotal, 2) }} €</div>
+            <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Zisk (tržby − náklady)</div>
         </div>
     </div>
 
     {{-- Tabuľka predaja --}}
-    <div style="background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 24px;">
-        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 16px; border-left: 3px solid #6d28d9; padding-left: 10px;">Predaj podľa výrobkov</div>
-        <table style="width: 100%; border-collapse: collapse;">
+    <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6">
+        <div class="font-semibold text-base mb-4 border-l-[3px] border-l-violet-700 pl-2.5">Predaj podľa výrobkov</div>
+        <table class="w-full border-collapse">
             <thead>
-                <tr style="border-bottom: 1px solid #e5e7eb;">
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Výrobok</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Predané množstvo</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Tržby</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Náklady</th>
-                    <th style="text-align: left; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase;">Zisk</th>
+                <tr class="border-b border-gray-200">
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Výrobok</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Predané množstvo</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Tržby</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Náklady</th>
+                    <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Zisk</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($productStats as $stat)
-                    <tr style="border-bottom: 1px solid #f3f4f6;">
-                        <td style="padding: 12px 12px; font-weight: 500;">{{ $stat['nazov'] }}</td>
-                        <td style="padding: 12px 12px;">{{ (float) $stat['mnozstvo'] }} {{ $stat['jednotka'] }}</td>
-                        <td style="padding: 12px 12px;">{{ number_format($stat['trzby'], 2) }} €</td>
-                        <td style="padding: 12px 12px;">{{ number_format($stat['naklady'], 2) }} €</td>
-                        <td style="padding: 12px 12px; font-weight: 600; color: #059669;">{{ number_format($stat['trzby'] - $stat['naklady'], 2) }} €</td>
+                    <tr class="border-b border-gray-100">
+                        <td class="px-3 py-3 font-medium">{{ $stat['nazov'] }}</td>
+                        <td class="px-3 py-3">{{ (float) $stat['mnozstvo'] }} {{ $stat['jednotka'] }}</td>
+                        <td class="px-3 py-3">{{ number_format($stat['trzby'], 2) }} €</td>
+                        <td class="px-3 py-3">{{ number_format($stat['naklady'], 2) }} €</td>
+                        <td class="px-3 py-3 font-semibold text-emerald-600">{{ number_format($stat['trzby'] - $stat['naklady'], 2) }} €</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 28px; color: #9ca3af; font-style: italic;">Žiadne dáta.</td>
+                        <td colspan="5" class="text-center py-7 text-gray-400 italic">Žiadne dáta.</td>
                     </tr>
                 @endforelse
             </tbody>
