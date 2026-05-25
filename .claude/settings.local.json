@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(docker compose *)",
-      "Bash(docker exec *)"
+      "Bash(docker exec *)",
+      "PowerShell(docker exec planovac-laravel.test-1 composer dump-autoload 2>&1)",
+      "Bash(git -C \"c:\\\\Users\\\\jozef\\\\Documents\\\\KNUT-vecy do skoly\\\\2.rocnik\\\\Odborna prax\\\\Planovac\" show HEAD:resources/css/app.css)"
     ]
   }
 }

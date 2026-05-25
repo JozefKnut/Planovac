@@ -12,6 +12,15 @@
             <span class="w-9 h-9 bg-white/20 rounded-[10px] flex items-center justify-center text-lg shrink-0">📦</span>
             <h1 class="text-2xl font-bold">Plánovač výroby</h1>
             <span class="text-white/60 font-normal text-base ml-1">— správa výrobkov a zákaziek</span>
+            <div class="ml-auto flex items-center gap-3">
+                <span class="text-white/80 text-sm">{{ auth()->user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="bg-white/20 hover:bg-white/30 text-white text-sm px-3 py-1.5 rounded-lg transition">
+                        Odhlásiť sa
+                    </button>
+                </form>
+            </div>
         </header>
 
         <nav class="bg-white shadow-[0_2px_4px_rgba(0,0,0,0.1)] px-6 flex gap-2">
