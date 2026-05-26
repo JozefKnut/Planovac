@@ -11,7 +11,6 @@
         <header class="text-white p-4 flex items-center gap-3" style="background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 60%, #7c3aed 100%);">
             <span class="w-9 h-9 bg-white/20 rounded-[10px] flex items-center justify-center text-lg shrink-0">📦</span>
             <h1 class="text-2xl font-bold">Plánovač výroby</h1>
-            <span class="text-white/60 font-normal text-base ml-1">— správa výrobkov a zákaziek</span>
             <div class="ml-auto flex items-center gap-3">
                 <span class="text-white/80 text-sm">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}">
