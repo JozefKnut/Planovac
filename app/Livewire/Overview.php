@@ -8,34 +8,34 @@ use Livewire\Component;
 
 class Overview extends Component
 {
-    public string $filterTyp = 'tyden';
-    public string $selTyden  = '';
-    public string $selMesiac = '';
-    public string $selRok    = '';
+    public string $filterType = 'week';
+    public string $selWeek    = '';
+    public string $selMonth   = '';
+    public string $selYear    = '';
 
     public function mount(): void
     {
         $now = Carbon::now();
-        $this->selTyden  = sprintf('%s-W%02d', $now->format('o'), (int) $now->format('W'));
-        $this->selMesiac = $now->format('Y-m');
-        $this->selRok    = $now->format('Y');
+        $this->selWeek  = sprintf('%s-W%02d', $now->format('o'), (int) $now->format('W'));
+        $this->selMonth = $now->format('Y-m');
+        $this->selYear  = $now->format('Y');
     }
 
     private function getOrders()
     {
-        $query = Order::where('stav', 'vybavena')->with('polozky.vyrobok');
+        $query = Order::where('status', 'fulfilled')->with('items.product');
 
-        if ($this->filterTyp === 'tyden' && $this->selTyden) {
-            [$year, $weekNum] = explode('-W', $this->selTyden);
+        if ($this->filterType === 'week' && $this->selWeek) {
+            [$year, $weekNum] = explode('-W', $this->selWeek);
             $start = Carbon::now()->setISODate((int) $year, (int) $weekNum)->startOfDay();
             $end   = $start->copy()->addDays(6)->endOfDay();
             $query->whereBetween('created_at', [$start, $end]);
-        } elseif ($this->filterTyp === 'mesiac' && $this->selMesiac) {
-            $start = Carbon::parse($this->selMesiac . '-01')->startOfMonth();
-            $end   = Carbon::parse($this->selMesiac . '-01')->endOfMonth();
+        } elseif ($this->filterType === 'month' && $this->selMonth) {
+            $start = Carbon::parse($this->selMonth . '-01')->startOfMonth();
+            $end   = Carbon::parse($this->selMonth . '-01')->endOfMonth();
             $query->whereBetween('created_at', [$start, $end]);
-        } elseif ($this->filterTyp === 'rok' && $this->selRok) {
-            $query->whereYear('created_at', $this->selRok);
+        } elseif ($this->filterType === 'year' && $this->selYear) {
+            $query->whereYear('created_at', $this->selYear);
         }
 
         return $query->get();
@@ -47,34 +47,34 @@ class Overview extends Component
 
         $productStats = [];
         foreach ($orders as $order) {
-            foreach ($order->polozky as $item) {
-                $vid = $item->vyrobok_id;
-                if (!isset($productStats[$vid])) {
-                    $productStats[$vid] = [
-                        'nazov'    => $item->vyrobok->nazov,
-                        'jednotka' => $item->vyrobok->jednotka,
-                        'mnozstvo' => 0.0,
-                        'trzby'    => 0.0,
-                        'naklady'  => 0.0,
+            foreach ($order->items as $item) {
+                $pid = $item->product_id;
+                if (!isset($productStats[$pid])) {
+                    $productStats[$pid] = [
+                        'name'     => $item->product->name,
+                        'unit'     => $item->product->unit,
+                        'quantity' => 0.0,
+                        'revenue'  => 0.0,
+                        'costs'    => 0.0,
                     ];
                 }
-                $productStats[$vid]['mnozstvo'] += (float) $item->mnozstvo;
-                $productStats[$vid]['trzby']    += (float) $item->mnozstvo * (float) $item->cena_za_jednotku;
-                $productStats[$vid]['naklady']  += (float) $item->mnozstvo * (float) $item->vyrobok->naklady;
+                $productStats[$pid]['quantity'] += (float) $item->quantity;
+                $productStats[$pid]['revenue']  += (float) $item->quantity * (float) $item->price_per_unit;
+                $productStats[$pid]['costs']    += (float) $item->quantity * (float) $item->product->costs;
             }
         }
 
-        $trzbyTotal   = collect($productStats)->sum('trzby');
-        $nakladyTotal = collect($productStats)->sum('naklady');
+        $revenueTotal = collect($productStats)->sum('revenue');
+        $costsTotal   = collect($productStats)->sum('costs');
         $currentYear  = Carbon::now()->year;
 
         return view('livewire.overview', [
-            'pocetZakaziek' => $orders->count(),
-            'trzbyTotal'    => $trzbyTotal,
-            'nakladyTotal'  => $nakladyTotal,
-            'ziskTotal'     => $trzbyTotal - $nakladyTotal,
-            'productStats'  => $productStats,
-            'roky'          => range($currentYear, max(2024, $currentYear - 5)),
+            'orderCount'   => $orders->count(),
+            'revenueTotal' => $revenueTotal,
+            'costsTotal'   => $costsTotal,
+            'profitTotal'  => $revenueTotal - $costsTotal,
+            'productStats' => $productStats,
+            'years'        => range($currentYear, max(2024, $currentYear - 5)),
         ]);
     }
 }

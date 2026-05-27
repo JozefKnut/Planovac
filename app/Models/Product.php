@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $table = 'vyrobky';
-    protected $fillable = ['nazov', 'jednotka', 'cena', 'naklady'];
+    protected $table = 'products';
+    protected $fillable = ['name', 'unit', 'price', 'costs'];
 }

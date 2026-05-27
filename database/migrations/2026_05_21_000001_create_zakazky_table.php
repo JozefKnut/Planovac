@@ -8,17 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('zakazky', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('zakaznik');
-            $table->decimal('celkom', 10, 2)->default(0);
-            $table->enum('stav', ['nevybavena', 'vybavena'])->default('nevybavena');
+            $table->string('customer');
+            $table->decimal('total', 10, 2)->default(0);
+            $table->enum('status', ['pending', 'fulfilled'])->default('pending');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('zakazky');
+        Schema::dropIfExists('orders');
     }
 };

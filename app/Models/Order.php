@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    protected $table = 'zakazky';
-    protected $fillable = ['zakaznik', 'celkom', 'stav'];
+    protected $table = 'orders';
+    protected $fillable = ['customer', 'total', 'status'];
 
-    public function polozky(): HasMany
+    public function items(): HasMany
     {
-        return $this->hasMany(OrderItem::class, 'zakazka_id');
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 }
