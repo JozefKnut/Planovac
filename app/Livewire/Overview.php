@@ -6,9 +6,17 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Livewire\Component;
 
+enum FilterTyp: string
+{
+    case Tyden  = 'tyden';
+    case Mesiac = 'mesiac';
+    case Rok    = 'rok';
+    case Vsetko = 'vsetko';
+}
+
 class Overview extends Component
 {
-    public string $filterTyp = 'tyden';
+    public FilterTyp $filterTyp = FilterTyp::Tyden;
     public string $selTyden  = '';
     public string $selMesiac = '';
     public string $selRok    = '';
@@ -25,16 +33,16 @@ class Overview extends Component
     {
         $query = Order::where('stav', 'vybavena')->with('polozky.vyrobok');
 
-        if ($this->filterTyp === 'tyden' && $this->selTyden) {
+        if ($this->filterTyp === FilterTyp::Tyden && $this->selTyden) {
             [$year, $weekNum] = explode('-W', $this->selTyden);
             $start = Carbon::now()->setISODate((int) $year, (int) $weekNum)->startOfDay();
             $end   = $start->copy()->addDays(6)->endOfDay();
             $query->whereBetween('created_at', [$start, $end]);
-        } elseif ($this->filterTyp === 'mesiac' && $this->selMesiac) {
+        } elseif ($this->filterTyp === FilterTyp::Mesiac && $this->selMesiac) {
             $start = Carbon::parse($this->selMesiac . '-01')->startOfMonth();
             $end   = Carbon::parse($this->selMesiac . '-01')->endOfMonth();
             $query->whereBetween('created_at', [$start, $end]);
-        } elseif ($this->filterTyp === 'rok' && $this->selRok) {
+        } elseif ($this->filterTyp === FilterTyp::Rok && $this->selRok) {
             $query->whereYear('created_at', $this->selRok);
         }
 

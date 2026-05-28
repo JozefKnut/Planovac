@@ -10,7 +10,7 @@
         @foreach(['tyden' => 'Týždeň', 'mesiac' => 'Mesiac', 'rok' => 'Rok', 'vsetko' => 'Všetko'] as $typ => $label)
             <button wire:click="$set('filterTyp', '{{ $typ }}')"
                 class="border-0 rounded-[7px] px-4 py-1.5 text-sm cursor-pointer
-                    {{ $filterTyp === $typ ? 'bg-violet-700 text-white font-semibold' : 'bg-transparent text-gray-700 font-medium' }}">
+                    {{ $filterTyp->value === $typ ? 'bg-violet-700 text-white font-semibold' : 'bg-transparent text-gray-700 font-medium' }}">
                 {{ $label }}
             </button>
         @endforeach
@@ -18,15 +18,15 @@
 
     {{-- Výber obdobia --}}
     <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] px-6 py-4 mb-5 flex items-center gap-3.5">
-        @if($filterTyp === 'tyden')
+        @if($filterTyp === \App\Livewire\FilterTyp::Tyden)
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber týždeň:</label>
             <input type="week" wire:model.live="selTyden"
                 class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
-        @elseif($filterTyp === 'mesiac')
+        @elseif($filterTyp === \App\Livewire\FilterTyp::Mesiac)
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber mesiac:</label>
             <input type="month" wire:model.live="selMesiac"
                 class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
-        @elseif($filterTyp === 'rok')
+        @elseif($filterTyp === \App\Livewire\FilterTyp::Rok)
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber rok:</label>
             <select wire:model.live="selRok"
                 class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none">
