@@ -3,107 +3,106 @@
 namespace App\Livewire;
 
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Product;
 use Livewire\Component;
 
 class Orders extends Component
 {
-    public string $zakaznik = '';
-    public array $polozky = [
-        ['vyrobok_id' => '', 'mnozstvo' => 1],
+    public string $customer = '';
+    public array $items = [
+        ['product_id' => '', 'quantity' => 1],
     ];
 
-    public function pridatPolozku(): void
+    public function addItem(): void
     {
-        $this->polozky[] = ['vyrobok_id' => '', 'mnozstvo' => 1];
+        $this->items[] = ['product_id' => '', 'quantity' => 1];
     }
 
-    public function odstranitPolozku(int $index): void
+    public function removeItem(int $index): void
     {
-        if (count($this->polozky) > 1) {
-            array_splice($this->polozky, $index, 1);
-            $this->polozky = array_values($this->polozky);
+        if (count($this->items) > 1) {
+            array_splice($this->items, $index, 1);
+            $this->items = array_values($this->items);
         }
     }
 
-    public function znizitMnozstvo(int $index): void
+    public function decreaseQuantity(int $index): void
     {
-        $current = (float) ($this->polozky[$index]['mnozstvo'] ?? 1);
-        $this->polozky[$index]['mnozstvo'] = max(0.5, $current - 0.5);
+        $current = (float) ($this->items[$index]['quantity'] ?? 1);
+        $this->items[$index]['quantity'] = max(0.5, $current - 0.5);
     }
 
-    public function ulozitZakazku(): void
+    public function saveOrder(): void
     {
         $this->validate([
-            'zakaznik'               => 'required|string|max:255',
-            'polozky'                => 'required|array|min:1',
-            'polozky.*.vyrobok_id'   => 'required|exists:vyrobky,id',
-            'polozky.*.mnozstvo'     => 'required|numeric|min:0.001',
+            'customer'           => 'required|string|max:255',
+            'items'              => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity'   => 'required|numeric|min:0.001',
         ], [
-            'zakaznik.required'            => 'Zadaj meno zákazníka.',
-            'polozky.*.vyrobok_id.required' => 'Vyber výrobok pre každú položku.',
-            'polozky.*.mnozstvo.min'        => 'Množstvo musí byť kladné číslo.',
+            'customer.required'           => 'Zadaj meno zákazníka.',
+            'items.*.product_id.required' => 'Vyber výrobok pre každú položku.',
+            'items.*.quantity.min'        => 'Množstvo musí byť kladné číslo.',
         ]);
 
-        $products = Product::whereIn('id', collect($this->polozky)->pluck('vyrobok_id'))
+        $products = Product::whereIn('id', collect($this->items)->pluck('product_id'))
             ->get()
             ->keyBy('id');
 
-        $celkom = collect($this->polozky)->sum(
-            fn($p) => $products[$p['vyrobok_id']]->cena * (float) $p['mnozstvo']
+        $total = collect($this->items)->sum(
+            fn($p) => $products[$p['product_id']]->price * (float) $p['quantity']
         );
 
-        $zakazka = Order::create([
-            'zakaznik' => $this->zakaznik,
-            'celkom'   => $celkom,
-            'stav'     => 'nevybavena',
+        $order = Order::create([
+            'customer' => $this->customer,
+            'total'    => $total,
+            'status'   => 'pending',
         ]);
 
-        foreach ($this->polozky as $p) {
-            $zakazka->polozky()->create([
-                'vyrobok_id'       => $p['vyrobok_id'],
-                'mnozstvo'         => $p['mnozstvo'],
-                'cena_za_jednotku' => $products[$p['vyrobok_id']]->cena,
+        foreach ($this->items as $p) {
+            $order->items()->create([
+                'product_id'     => $p['product_id'],
+                'quantity'       => $p['quantity'],
+                'price_per_unit' => $products[$p['product_id']]->price,
             ]);
         }
 
-        $this->zakaznik = '';
-        $this->polozky = [['vyrobok_id' => '', 'mnozstvo' => 1]];
+        $this->customer = '';
+        $this->items = [['product_id' => '', 'quantity' => 1]];
     }
 
-    public function vybaviZakazku(int $id): void
+    public function fulfillOrder(int $id): void
     {
-        Order::findOrFail($id)->update(['stav' => 'vybavena']);
+        Order::findOrFail($id)->update(['status' => 'fulfilled']);
     }
 
-    public function vratZakazku(int $id): void
+    public function returnOrder(int $id): void
     {
-        Order::findOrFail($id)->update(['stav' => 'nevybavena']);
+        Order::findOrFail($id)->update(['status' => 'pending']);
     }
 
-    public function vymazatZakazku(int $id): void
+    public function deleteOrder(int $id): void
     {
         Order::findOrFail($id)->delete();
     }
 
     public function render()
     {
-        $vyrobky = Product::all();
-        $productMap = $vyrobky->keyBy('id');
+        $products = Product::all();
+        $productMap = $products->keyBy('id');
 
-        $celkovaCena = collect($this->polozky)->sum(function ($p) use ($productMap) {
-            $vid = $p['vyrobok_id'] ?? '';
-            return ($vid && isset($productMap[$vid]))
-                ? $productMap[$vid]->cena * (float) ($p['mnozstvo'] ?? 0)
+        $totalPrice = collect($this->items)->sum(function ($p) use ($productMap) {
+            $pid = $p['product_id'] ?? '';
+            return ($pid && isset($productMap[$pid]))
+                ? $productMap[$pid]->price * (float) ($p['quantity'] ?? 0)
                 : 0;
         });
 
         return view('livewire.orders', [
-            'vyrobky'           => $vyrobky,
-            'celkovaCena'       => $celkovaCena,
-            'nevybaveneZakazky' => Order::with('polozky.vyrobok')->where('stav', 'nevybavena')->latest()->get(),
-            'vybaveneZakazky'   => Order::with('polozky.vyrobok')->where('stav', 'vybavena')->latest()->get(),
+            'products'        => $products,
+            'totalPrice'      => $totalPrice,
+            'pendingOrders'   => Order::with('items.product')->where('status', 'pending')->latest()->get(),
+            'fulfilledOrders' => Order::with('items.product')->where('status', 'fulfilled')->latest()->get(),
         ]);
     }
 }

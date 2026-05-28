@@ -7,10 +7,10 @@
 
     {{-- Filter tlačidlá --}}
     <div class="flex gap-1 mb-5 bg-white rounded-[10px] p-1 w-fit shadow-[0_1px_4px_rgba(0,0,0,0.07)]">
-        @foreach(['tyden' => 'Týždeň', 'mesiac' => 'Mesiac', 'rok' => 'Rok', 'vsetko' => 'Všetko'] as $typ => $label)
-            <button wire:click="$set('filterTyp', '{{ $typ }}')"
+        @foreach(['week' => 'Týždeň', 'month' => 'Mesiac', 'year' => 'Rok', 'all' => 'Všetko'] as $type => $label)
+            <button wire:click="$set('filterType', '{{ $type }}')"
                 class="border-0 rounded-[7px] px-4 py-1.5 text-sm cursor-pointer
-                    {{ $filterTyp === $typ ? 'bg-violet-700 text-white font-semibold' : 'bg-transparent text-gray-700 font-medium' }}">
+                    {{ $filterType === $type ? 'bg-violet-700 text-white font-semibold' : 'bg-transparent text-gray-700 font-medium' }}">
                 {{ $label }}
             </button>
         @endforeach
@@ -18,20 +18,20 @@
 
     {{-- Výber obdobia --}}
     <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] px-6 py-4 mb-5 flex items-center gap-3.5">
-        @if($filterTyp === 'tyden')
+        @if($filterType === 'week')
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber týždeň:</label>
-            <input type="week" wire:model.live="selTyden"
+            <input type="week" wire:model.live="selWeek"
                 class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
-        @elseif($filterTyp === 'mesiac')
+        @elseif($filterType === 'month')
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber mesiac:</label>
-            <input type="month" wire:model.live="selMesiac"
+            <input type="month" wire:model.live="selMonth"
                 class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
-        @elseif($filterTyp === 'rok')
+        @elseif($filterType === 'year')
             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Vyber rok:</label>
-            <select wire:model.live="selRok"
+            <select wire:model.live="selYear"
                 class="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none">
-                @foreach($roky as $rok)
-                    <option value="{{ $rok }}">{{ $rok }}</option>
+                @foreach($years as $year)
+                    <option value="{{ $year }}">{{ $year }}</option>
                 @endforeach
             </select>
         @else
@@ -43,22 +43,22 @@
     <div class="grid grid-cols-4 gap-4 mb-5">
         <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-violet-700">
             <div class="text-2xl mb-2.5">🧾</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ $pocetZakaziek }}</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ $orderCount }}</div>
             <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Vybavené zákazky</div>
         </div>
         <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-cyan-600">
             <div class="text-2xl mb-2.5">💰</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($trzbyTotal, 2) }} €</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($revenueTotal, 2) }} €</div>
             <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Tržby celkom</div>
         </div>
         <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-amber-600">
             <div class="text-2xl mb-2.5">🏭</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($nakladyTotal, 2) }} €</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($costsTotal, 2) }} €</div>
             <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Náklady celkom</div>
         </div>
         <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.07)] p-6 border-t-[3px] border-t-emerald-600">
             <div class="text-2xl mb-2.5">📈</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($ziskTotal, 2) }} €</div>
+            <div class="text-3xl font-bold text-gray-900 mb-1.5">{{ number_format($profitTotal, 2) }} €</div>
             <div class="text-[0.72rem] font-semibold text-gray-500 uppercase tracking-wide">Zisk (tržby − náklady)</div>
         </div>
     </div>
@@ -79,11 +79,11 @@
             <tbody>
                 @forelse($productStats as $stat)
                     <tr class="border-b border-gray-100">
-                        <td class="px-3 py-3 font-medium">{{ $stat['nazov'] }}</td>
-                        <td class="px-3 py-3">{{ (float) $stat['mnozstvo'] }} {{ $stat['jednotka'] }}</td>
-                        <td class="px-3 py-3">{{ number_format($stat['trzby'], 2) }} €</td>
-                        <td class="px-3 py-3">{{ number_format($stat['naklady'], 2) }} €</td>
-                        <td class="px-3 py-3 font-semibold text-emerald-600">{{ number_format($stat['trzby'] - $stat['naklady'], 2) }} €</td>
+                        <td class="px-3 py-3 font-medium">{{ $stat['name'] }}</td>
+                        <td class="px-3 py-3">{{ (float) $stat['quantity'] }} {{ $stat['unit'] }}</td>
+                        <td class="px-3 py-3">{{ number_format($stat['revenue'], 2) }} €</td>
+                        <td class="px-3 py-3">{{ number_format($stat['costs'], 2) }} €</td>
+                        <td class="px-3 py-3 font-semibold text-emerald-600">{{ number_format($stat['revenue'] - $stat['costs'], 2) }} €</td>
                     </tr>
                 @empty
                     <tr>

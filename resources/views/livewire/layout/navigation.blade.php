@@ -30,13 +30,13 @@ new class extends Component
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('prehlad')" :active="request()->routeIs('prehlad')" wire:navigate>
+                    <x-nav-link :href="route('overview')" :active="request()->routeIs('overview')" wire:navigate>
                         Prehľad
                     </x-nav-link>
-                    <x-nav-link :href="route('vyrobky')" :active="request()->routeIs('vyrobky')" wire:navigate>
+                    <x-nav-link :href="route('products')" :active="request()->routeIs('products')" wire:navigate>
                         Výrobky
                     </x-nav-link>
-                    <x-nav-link :href="route('zakazky')" :active="request()->routeIs('zakazky')" wire:navigate>
+                    <x-nav-link :href="route('orders')" :active="request()->routeIs('orders')" wire:navigate>
                         Zákazky
                     </x-nav-link>
                 </div>
@@ -87,13 +87,13 @@ new class extends Component
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('prehlad')" :active="request()->routeIs('prehlad')" wire:navigate>
+            <x-responsive-nav-link :href="route('overview')" :active="request()->routeIs('overview')" wire:navigate>
                 Prehľad
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('vyrobky')" :active="request()->routeIs('vyrobky')" wire:navigate>
+            <x-responsive-nav-link :href="route('products')" :active="request()->routeIs('products')" wire:navigate>
                 Výrobky
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('zakazky')" :active="request()->routeIs('zakazky')" wire:navigate>
+            <x-responsive-nav-link :href="route('orders')" :active="request()->routeIs('orders')" wire:navigate>
                 Zákazky
             </x-responsive-nav-link>
         </div>

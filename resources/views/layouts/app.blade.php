@@ -23,9 +23,9 @@
         </header>
 
         <nav class="bg-white shadow-[0_2px_4px_rgba(0,0,0,0.1)] px-6 flex gap-2">
-            <a href="{{ route('vyrobky') }}" class="nav-link {{ request()->routeIs('vyrobky') ? 'active' : '' }}">⚙️ Výrobky</a>
-            <a href="{{ route('zakazky') }}" class="nav-link {{ request()->routeIs('zakazky') ? 'active' : '' }}">📋 Zákazky</a>
-            <a href="{{ route('prehlad') }}" class="nav-link {{ request()->routeIs('prehlad') ? 'active' : '' }}">📊 Prehľad</a>
+            <a href="{{ route('products') }}" class="nav-link {{ request()->routeIs('products') ? 'active' : '' }}">⚙️ Výrobky</a>
+            <a href="{{ route('orders') }}" class="nav-link {{ request()->routeIs('orders') ? 'active' : '' }}">📋 Zákazky</a>
+            <a href="{{ route('overview') }}" class="nav-link {{ request()->routeIs('overview') ? 'active' : '' }}">📊 Prehľad</a>
         </nav>
 
         @yield('content')

@@ -7,32 +7,32 @@ use Livewire\Component;
 
 class Products extends Component
 {
-    public string $nazov = '';
-    public string $jednotka = 'ks';
-    public string $cena = '';
-    public string $naklady = '';
+    public string $name = '';
+    public string $unit = 'pcs';
+    public string $price = '';
+    public string $costs = '';
 
-    public function pridatVyrobok(): void
+    public function addProduct(): void
     {
         $this->validate([
-            'nazov' => 'required|string|max:255',
-            'jednotka' => 'required|string',
-            'cena' => 'required|numeric|min:0',
-            'naklady' => 'required|numeric|min:0',
+            'name'  => 'required|string|max:255',
+            'unit'  => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'costs' => 'required|numeric|min:0',
         ]);
 
         Product::create([
-            'nazov' => $this->nazov,
-            'jednotka' => $this->jednotka,
-            'cena' => $this->cena,
-            'naklady' => $this->naklady,
+            'name'  => $this->name,
+            'unit'  => $this->unit,
+            'price' => $this->price,
+            'costs' => $this->costs,
         ]);
 
-        $this->reset(['nazov', 'jednotka', 'cena', 'naklady']);
-        $this->jednotka = 'ks';
+        $this->reset(['name', 'unit', 'price', 'costs']);
+        $this->unit = 'pcs';
     }
 
-    public function vymazatVyrobok(int $id): void
+    public function deleteProduct(int $id): void
     {
         Product::findOrFail($id)->delete();
     }
@@ -40,7 +40,7 @@ class Products extends Component
     public function render()
     {
         return view('livewire.products', [
-            'vyrobky' => Product::all(),
+            'products' => Product::all(),
         ]);
     }
 }
