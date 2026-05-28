@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/vyrobky', 'products')->name('vyrobky');
     Route::view('/zakazky', 'orders')->name('zakazky');
     Route::view('/prehlad', 'overview')->name('prehlad');
+    Route::view('/pouzivatelia', 'users')->name('pouzivatelia');
 });
 
 require __DIR__.'/auth.php';

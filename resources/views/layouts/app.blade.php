@@ -27,6 +27,7 @@
             <a href="{{ route('vyrobky') }}" class="nav-link {{ request()->routeIs('vyrobky') ? 'active' : '' }}">⚙️ Výrobky</a>
             <a href="{{ route('zakazky') }}" class="nav-link {{ request()->routeIs('zakazky') ? 'active' : '' }}">📋 Zákazky</a>
             <a href="{{ route('prehlad') }}" class="nav-link {{ request()->routeIs('prehlad') ? 'active' : '' }}">📊 Prehľad</a>
+            <a href="{{ route('pouzivatelia') }}" class="nav-link {{ request()->routeIs('pouzivatelia') ? 'active' : '' }}">👥 Používatelia</a>
         </nav>
 
         @yield('content')
