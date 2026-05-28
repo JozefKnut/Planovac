@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect()->route('prehlad');
+        return redirect()->route('zakazky');
     }
     return view('welcome');
 });
